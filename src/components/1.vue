@@ -186,15 +186,6 @@
       handleSelect(item) {
         // console.log("你选择了"+item.value);
       },
-      hint_error(m) {
-        this.$message.error(m);
-      },
-      hint_success(m) {
-        this.$message({
-          message: m,
-          type: 'success'
-        });
-      },
       logout() {
         console.log(2);
         this.dialogFormVisible = false

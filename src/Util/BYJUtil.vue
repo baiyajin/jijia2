@@ -12,6 +12,17 @@
     }
   }
 
+  function hint_success(obj,m){
+    obj.$message({
+      message: m,
+      type: 'success'
+    });
+  }
+
+  function hint_error(obj,m) {
+    obj.$message.error(m);
+  }
+
   //获取一组随机rgba颜色
   function getRandmColor(opacity) {
     //获取0-1之间的随机数
@@ -24,6 +35,8 @@
 
     export default {
       checkPhone,
-      getRandmColor
+      getRandmColor,
+      hint_success,
+      hint_error
     }
 </script>

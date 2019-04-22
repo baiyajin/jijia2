@@ -18,7 +18,7 @@
             :title="user.name"
             width="200"
             trigger="click">
-            <el-col v-for="(value, key, index) in user">
+            <el-col v-for="(value, key, index) in user" :key="index">
               <el-card shadow="hover">{{ key }} ： {{ value }}</el-card>
             </el-col>
             <el-button slot="reference" type="primary" size="mini" @click="visible2 = false">个人信息</el-button>
@@ -92,15 +92,7 @@
     },
 
     methods: {
-      hint_error(m) {
-        this.$message.error(m);
-      },
-      hint_success(m) {
-        this.$message({
-          message: m,
-          type: 'success'
-        });
-      },
+
       logout() {
         this.visible2 = false
         localStorage.setItem("UserINFO","");
@@ -114,17 +106,17 @@
         var check = true;
 
         if(!this.user.phone){
-          this.hint_error("请输入手机号")
+          BYJUtil.hint_error(this,"请输入手机号")
           return check = false;
         }
 
         if(!BYJUtil.checkPhone(this.user.phone)){
-          this.hint_error("手机号格式不对")
+          BYJUtil.hint_error(this,"手机号格式不对")
           return check = false;
         }
 
         if(!this.user.password){
-          this.hint_error("请输入密码")
+          BYJUtil.hint_error(this,"请输入密码")
           return check = false;
         }
 
@@ -134,10 +126,11 @@
 
           localStorage.setItem("phone",this.user.phone);
           localStorage.setItem("password",this.user.password);
+          this.style.color.color = this.style.background.background = BYJUtil.getRandmColor(0.8);
 
           this.$axios.post('/SystemUserController/login', {"phone":this.user.phone,"password":this.user.password,}).then(res => {
             if(res.data.result === 0){
-              this.hint_success(res.data.message)
+              BYJUtil.hint_success(this,res.data.message)
 
               //取时必须JSON.parse()拿,字符串的json就被转换成对象，就可以用对象的方式取值了
               localStorage.setItem("UserINFO",JSON.stringify(res.data.user));
@@ -145,19 +138,19 @@
               this.user.name = UserINFO.name
               this.dialogFormVisible = false
             }else{
-              this.hint_error(res.data.message)
+              BYJUtil.hint_error(this,res.data.message)
             }
 
           }).catch(err => {
-            this.hint_error(err.message)
-            console.log(err)
+            BYJUtil.hint_error(this,err.message)
           })
         }
       }
     },
     /*vue初始化生命周期*/
     created(){
-      this.style.color.color = this.style.background.background = BYJUtil.getRandmColor;
+
+      this.style.color.color = this.style.background.background = BYJUtil.getRandmColor(0.8);
       if (null !== localStorage.getItem("UserINFO") && "" !== localStorage.getItem("UserINFO") && undefined !== localStorage.getItem("UserINFO")) {
         UserINFO = JSON.parse(localStorage.getItem("UserINFO"));
         this.user = UserINFO;
